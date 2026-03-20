@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
   });
   if (existingOrg) {
     return NextResponse.json(
-      { error: "An application with this organisation email is already under review." },
+      { error: "An application with this account email is already under review." },
       { status: 409 }
     );
   }

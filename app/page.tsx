@@ -62,7 +62,7 @@ export default async function HomePage() {
           <h1 className="text-5xl sm:text-6xl font-extrabold text-gray-900 mb-6 leading-tight tracking-tight">
             Manage Your Fitness
             <br />
-            <span className="text-emerald-500">Organisation Smarter</span>
+            <span className="text-emerald-500">Business Smarter</span>
           </h1>
           <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
             One platform for admins, trainers, and clients. Build personalised programs, track
@@ -93,7 +93,7 @@ export default async function HomePage() {
       <section className="border-y bg-gray-50 py-12 px-4">
         <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
-            { value: "500+", label: "Organisations" },
+            { value: "500+", label: "Accounts" },
             { value: "10K+", label: "Trainers" },
             { value: "100K+", label: "Active Clients" },
             { value: "99.9%", label: "Uptime" },
@@ -123,7 +123,7 @@ export default async function HomePage() {
               {
                 icon: ShieldCheck,
                 title: "Multi-Tenant Admin",
-                desc: "Manage your organisation with full isolation. Each org gets its own dashboard, trainers, and clients with role-based access.",
+                desc: "Manage multiple fitness accounts with full isolation. Each account gets its own dashboard, trainers, and clients with role-based access.",
               },
               {
                 icon: Users,
@@ -254,7 +254,7 @@ export default async function HomePage() {
               Simple, Transparent Pricing
             </h2>
             <p className="text-gray-600">
-              Choose the plan that fits your organisation. All plans include a 14-day free trial.
+              Choose the plan that fits your business. All plans include a 14-day free trial.
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6 items-start">
@@ -291,7 +291,7 @@ export default async function HomePage() {
                 name: "Pro",
                 price: 199,
                 popular: false,
-                desc: "Unlimited scale for large organisations",
+                desc: "Unlimited scale for large accounts",
                 features: [
                   "Unlimited Trainers",
                   "Unlimited Clients",
@@ -348,10 +348,10 @@ export default async function HomePage() {
       <section className="bg-emerald-500 py-20 px-4 text-center">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to Transform Your Fitness Organisation?
+            Ready to Transform Your Fitness Business?
           </h2>
           <p className="text-emerald-100 mb-8 text-lg">
-            Join hundreds of fitness organisations already using FitPR to manage clients, trainers,
+            Join hundreds of fitness businesses already using FitPR to manage clients, trainers,
             and growth — all from one platform.
           </p>
           <Button
@@ -360,7 +360,7 @@ export default async function HomePage() {
             asChild
           >
             <Link href="/register">
-              Register Your Organisation
+              Register Your Business
               <ChevronRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>

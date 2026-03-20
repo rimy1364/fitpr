@@ -8,7 +8,7 @@ import { OrgDetailActions } from "./org-detail-actions";
 import { Badge } from "@/components/ui/badge";
 import { Mail, Phone, MapPin, Calendar, Link2, UserCheck } from "lucide-react";
 
-export const metadata = { title: "Organization Details" };
+export const metadata = { title: "Account Details" };
 
 interface Props { params: Promise<{ id: string }> }
 
@@ -108,7 +108,7 @@ export default async function OrgDetailPage({ params }: Props) {
             <UserCheck className="h-5 w-5 flex-shrink-0" />
             <div>
               Admin contact: <strong>{org.pendingAdminName}</strong> ({org.pendingAdminEmail}).
-              Approve this organisation to send them an invite.
+              Approve this account to send them an invite.
             </div>
           </CardContent>
         </Card>

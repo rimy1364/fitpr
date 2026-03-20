@@ -33,7 +33,7 @@ export function OrgTable({ orgs }: Props) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Organization</TableHead>
+          <TableHead>Account</TableHead>
           <TableHead>Plan</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Members</TableHead>

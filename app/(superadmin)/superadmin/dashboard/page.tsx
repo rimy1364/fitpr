@@ -34,7 +34,7 @@ export default async function SuperAdminDashboard() {
 
   const stats = [
     {
-      title: "Total Organizations",
+      title: "Total Accounts",
       value: totalOrgs,
       sub: `${activeOrgs} active, ${trialOrgs} trial`,
       icon: Building2,
@@ -97,7 +97,7 @@ export default async function SuperAdminDashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5" />
-            Recent Organizations
+            Recent Accounts
           </CardTitle>
         </CardHeader>
         <CardContent>

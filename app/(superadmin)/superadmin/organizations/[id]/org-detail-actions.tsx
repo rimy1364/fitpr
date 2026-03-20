@@ -52,7 +52,7 @@ export function OrgDetailActions({ org }: { org: Org }) {
     try {
       await updateOrg({ action: "approve" });
       toast({
-        title: "Organisation approved!",
+        title: "Account approved!",
         description: `Invite email sent to ${org.pendingAdminEmail}`,
       });
     } catch (e: unknown) {
@@ -79,11 +79,11 @@ export function OrgDetailActions({ org }: { org: Org }) {
               Approve & Send Invite
             </Button>
           }
-          title="Approve Organisation?"
+          title="Approve Account?"
           description={
             org.pendingAdminEmail
-              ? `This will activate the organisation on a 14-day trial and send an invite to ${org.pendingAdminEmail} to set up their admin account.`
-              : "This will activate the organisation on a 14-day trial."
+              ? `This will activate the account on a 14-day trial and send an invite to ${org.pendingAdminEmail} to set up their admin account.`
+              : "This will activate the account on a 14-day trial."
           }
           confirmLabel="Approve"
           variant="default"
@@ -122,11 +122,11 @@ export function OrgDetailActions({ org }: { org: Org }) {
                 {isSuspended ? "Reactivate" : "Suspend"}
               </Button>
             }
-            title={isSuspended ? "Reactivate Organisation?" : "Suspend Organisation?"}
+            title={isSuspended ? "Reactivate Account?" : "Suspend Account?"}
             description={
               isSuspended
-                ? "This will restore access for all users in this organisation."
-                : "This will immediately block all users in this organisation from logging in."
+                ? "This will restore access for all users in this account."
+                : "This will immediately block all users in this account from logging in."
             }
             confirmLabel={isSuspended ? "Reactivate" : "Suspend"}
             variant={isSuspended ? "default" : "destructive"}

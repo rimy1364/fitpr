@@ -47,7 +47,7 @@ export function LoginForm() {
           variant: "destructive",
           title: "Sign in failed",
           description:
-            result.error === "Organization is suspended or inactive."
+            result.error === "Account is suspended or inactive."
               ? result.error
               : "Invalid email or password.",
         });

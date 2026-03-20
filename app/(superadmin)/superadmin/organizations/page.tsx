@@ -6,13 +6,13 @@ import { OrgTable } from "@/components/superadmin/OrgTable";
 import { Plus } from "lucide-react";
 import { OrgStatus } from "@prisma/client";
 
-export const metadata = { title: "Organizations" };
+export const metadata = { title: "Accounts" };
 
 interface Props {
   searchParams: Promise<{ status?: string }>;
 }
 
-export default async function OrganizationsPage({ searchParams }: Props) {
+export default async function AccountsPage({ searchParams }: Props) {
   const { status } = await searchParams;
   const statusFilter = status as OrgStatus | undefined;
 
@@ -42,13 +42,13 @@ export default async function OrganizationsPage({ searchParams }: Props) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Organizations</h1>
-          <p className="text-muted-foreground">Manage all fitness organizations on the platform.</p>
+          <h1 className="text-2xl font-bold">Accounts</h1>
+          <p className="text-muted-foreground">Manage all fitness accounts on the platform.</p>
         </div>
         <Button asChild>
           <Link href="/superadmin/organizations/new">
             <Plus className="mr-2 h-4 w-4" />
-            Add Organization
+            Add Account
           </Link>
         </Button>
       </div>
@@ -56,7 +56,7 @@ export default async function OrganizationsPage({ searchParams }: Props) {
       {pendingCount > 0 && (
         <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-sm text-amber-800">
           <span className="flex h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
-          <strong>{pendingCount}</strong> organisation{pendingCount > 1 ? "s" : ""} awaiting
+          <strong>{pendingCount}</strong> account{pendingCount > 1 ? "s" : ""} awaiting
           approval.{" "}
           <Link
             href="?status=PENDING"

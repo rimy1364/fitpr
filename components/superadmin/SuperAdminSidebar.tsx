@@ -9,7 +9,7 @@ import {
 
 const navItems = [
   { href: "/superadmin/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/superadmin/organizations", label: "Organizations", icon: Building2 },
+  { href: "/superadmin/organizations", label: "Accounts", icon: Building2 },
   { href: "/superadmin/plans", label: "Platform Plans", icon: CreditCard },
   { href: "/superadmin/billing", label: "Billing", icon: DollarSign },
 ];

@@ -50,7 +50,7 @@ export function OrgOnboardingForm() {
       }
 
       toast({
-        title: "Organization created!",
+        title: "Account created!",
         description: `Invite email sent to ${data.adminEmail}`,
       });
       router.push(`/superadmin/organizations/${json.data.id}`);
@@ -64,11 +64,11 @@ export function OrgOnboardingForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <Card>
-        <CardHeader><CardTitle>Organization Details</CardTitle></CardHeader>
+        <CardHeader><CardTitle>Account Details</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="name">Organization Name *</Label>
+              <Label htmlFor="name">Account Name *</Label>
               <Input id="name" placeholder="FitZone Delhi" {...register("name")} onBlur={onNameBlur} />
               {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
             </div>
@@ -80,7 +80,7 @@ export function OrgOnboardingForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Organization Email *</Label>
+            <Label htmlFor="email">Account Email *</Label>
             <Input id="email" type="email" placeholder="contact@fitzone.com" {...register("email")} />
             {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
           </div>
