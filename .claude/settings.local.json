@@ -11,7 +11,12 @@
       "Bash(xargs grep:*)",
       "Bash(DIRECT_URL=\"postgresql://postgres:bR9w!2x81364@db.kexxdqrrcibwakwketxu.supabase.co:5432/postgres\" DATABASE_URL=\"postgresql://postgres.kexxdqrrcibwakwketxu:bR9w!2x81364@aws-1-ap-south-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1\" npx prisma db push)",
       "Bash(DIRECT_URL=\"postgresql://postgres:bR9w!2x81364@db.kexxdqrrcibwakwketxu.supabase.co:5432/postgres\" DATABASE_URL=\"postgresql://postgres.kexxdqrrcibwakwketxu:bR9w!2x81364@aws-1-ap-south-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1\" npx prisma db seed)",
-      "Bash(vercel --prod --yes)"
+      "Bash(vercel --prod --yes)",
+      "Bash(vercel git:*)",
+      "WebFetch(domain:fitpro-saas.vercel.app)",
+      "Bash(cat d:/FitPR/app/\\\\\\(superadmin\\\\\\)/superadmin/organizations/[id]/page.tsx)",
+      "Bash(cat d:/FitPR/app/api/superadmin/organizations/[id]/route.ts)",
+      "Bash(npm run:*)"
     ]
   }
 }

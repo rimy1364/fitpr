@@ -18,6 +18,7 @@ enum Role {
 }
 
 enum OrgStatus {
+  PENDING
   ACTIVE
   TRIAL
   SUSPENDED
@@ -98,8 +99,10 @@ model Organization {
   email                String
   phone                String?
   address              String?
-  status               OrgStatus          @default(TRIAL)
+  status               OrgStatus          @default(PENDING)
   trialEndsAt          DateTime?
+  pendingAdminName     String?
+  pendingAdminEmail    String?
   stripeCustomerId     String?            @unique
   subscriptionStatus   SubscriptionStatus @default(TRIAL)
   subscriptionPlan     PlatformPlanName   @default(STARTER)

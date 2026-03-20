@@ -43,7 +43,7 @@ export const updateOrgSchema = z.object({
   email: z.string().email().optional(),
   phone: z.string().optional(),
   address: z.string().optional(),
-  status: z.enum(["ACTIVE", "TRIAL", "SUSPENDED", "CANCELLED"]).optional(),
+  status: z.enum(["PENDING", "ACTIVE", "TRIAL", "SUSPENDED", "CANCELLED"]).optional(),
   subscriptionPlan: z.enum(["STARTER", "GROWTH", "PRO"]).optional(),
 });
 

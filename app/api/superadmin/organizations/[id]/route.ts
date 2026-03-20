@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { updateOrgSchema } from "@/lib/validations";
+import { sendInviteEmail } from "@/lib/resend";
+import { addDays } from "date-fns";
 
 interface Params { params: Promise<{ id: string }> }
 
@@ -35,16 +37,61 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { id } = await params;
   const body = await req.json();
-  const parsed = updateOrgSchema.safeParse(body);
 
+  // ── Special action: approve a pending org ──────────────────
+  if (body.action === "approve") {
+    const org = await prisma.organization.findUnique({ where: { id } });
+    if (!org) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    if (org.status !== "PENDING") {
+      return NextResponse.json({ error: "Organisation is not pending approval" }, { status: 400 });
+    }
+    if (!org.pendingAdminEmail) {
+      return NextResponse.json({ error: "No admin email on record" }, { status: 400 });
+    }
+
+    // Create invite for org admin
+    const invite = await prisma.orgInvite.create({
+      data: {
+        email: org.pendingAdminEmail,
+        organizationId: org.id,
+        role: "ORG_ADMIN",
+        expiresAt: addDays(new Date(), 7),
+      },
+    });
+
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+    await sendInviteEmail({
+      to: org.pendingAdminEmail,
+      name: org.pendingAdminName ?? "Admin",
+      orgName: org.name,
+      role: "ORG_ADMIN",
+      setupUrl: `${appUrl}/setup-account/${invite.token}`,
+    });
+
+    const updated = await prisma.organization.update({
+      where: { id },
+      data: {
+        status: "TRIAL",
+        subscriptionStatus: "TRIAL",
+        trialEndsAt: addDays(new Date(), 14),
+        pendingAdminName: null,
+        pendingAdminEmail: null,
+      },
+    });
+
+    return NextResponse.json({ data: updated });
+  }
+
+  // ── Standard update ────────────────────────────────────────
+  const parsed = updateOrgSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 });
   }
 
   const data = parsed.data;
 
-  // Update plan limits if plan changed
   if (data.subscriptionPlan) {
     const planLimits = {
       STARTER: { maxTrainers: 3, maxClients: 30 },
@@ -55,12 +102,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     Object.assign(data, limits);
   }
 
-  const { id: patchId } = await params;
-  const org = await prisma.organization.update({
-    where: { id: patchId },
-    data,
-  });
-
+  const org = await prisma.organization.update({ where: { id }, data });
   return NextResponse.json({ data: org });
 }
 
@@ -70,10 +112,9 @@ export async function DELETE(_: NextRequest, { params }: Params) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { id: deleteId } = await params;
-  // Soft delete by cancelling
+  const { id } = await params;
   await prisma.organization.update({
-    where: { id: deleteId },
+    where: { id },
     data: { status: "CANCELLED" },
   });
 

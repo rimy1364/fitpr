@@ -5,6 +5,7 @@ type AnyStatus = OrgStatus | SubscriptionStatus | ClientStatus | FormVideoStatus
 
 const statusConfig: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "info" }> = {
   // OrgStatus
+  PENDING: { label: "Pending Approval", variant: "warning" },
   ACTIVE: { label: "Active", variant: "success" },
   TRIAL: { label: "Trial", variant: "info" },
   SUSPENDED: { label: "Suspended", variant: "warning" },
@@ -15,7 +16,6 @@ const statusConfig: Record<string, { label: string; variant: "default" | "second
   PAUSED: { label: "Paused", variant: "warning" },
   COMPLETED: { label: "Completed", variant: "secondary" },
   // FormVideoStatus
-  PENDING: { label: "Pending", variant: "warning" },
   REVIEWED: { label: "Reviewed", variant: "success" },
   // PaymentStatus
   PAID: { label: "Paid", variant: "success" },

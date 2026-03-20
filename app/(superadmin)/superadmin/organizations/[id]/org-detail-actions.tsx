@@ -7,17 +7,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { useToast } from "@/components/ui/use-toast";
 import { OrgStatus, PlatformPlanName } from "@prisma/client";
-import { Ban, RefreshCw } from "lucide-react";
+import { Ban, RefreshCw, CheckCircle2, Loader2 } from "lucide-react";
 
 interface Org {
   id: string;
   status: OrgStatus;
   subscriptionPlan: PlatformPlanName;
+  pendingAdminName?: string | null;
+  pendingAdminEmail?: string | null;
 }
 
 export function OrgDetailActions({ org }: { org: Org }) {
   const [plan, setPlan] = useState<PlatformPlanName>(org.subscriptionPlan);
   const [isChangingPlan, setIsChangingPlan] = useState(false);
+  const [isApproving, setIsApproving] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -44,43 +47,93 @@ export function OrgDetailActions({ org }: { org: Org }) {
     }
   };
 
+  const handleApprove = async () => {
+    setIsApproving(true);
+    try {
+      await updateOrg({ action: "approve" });
+      toast({
+        title: "Organisation approved!",
+        description: `Invite email sent to ${org.pendingAdminEmail}`,
+      });
+    } catch (e: unknown) {
+      toast({ variant: "destructive", title: "Error", description: (e as Error).message });
+    } finally {
+      setIsApproving(false);
+    }
+  };
+
   const isSuspended = org.status === "SUSPENDED";
+  const isPending = org.status === "PENDING";
 
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <div className="flex items-center gap-2">
-        <Select value={plan} onValueChange={(v) => setPlan(v as PlatformPlanName)}>
-          <SelectTrigger className="w-36">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="STARTER">Starter</SelectItem>
-            <SelectItem value="GROWTH">Growth</SelectItem>
-            <SelectItem value="PRO">Pro</SelectItem>
-          </SelectContent>
-        </Select>
-        <Button size="sm" onClick={handleChangePlan} disabled={isChangingPlan || plan === org.subscriptionPlan}>
-          Update Plan
-        </Button>
-      </div>
+      {isPending ? (
+        <ConfirmDialog
+          trigger={
+            <Button className="bg-emerald-500 hover:bg-emerald-600 text-white" disabled={isApproving}>
+              {isApproving ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <CheckCircle2 className="mr-2 h-4 w-4" />
+              )}
+              Approve & Send Invite
+            </Button>
+          }
+          title="Approve Organisation?"
+          description={
+            org.pendingAdminEmail
+              ? `This will activate the organisation on a 14-day trial and send an invite to ${org.pendingAdminEmail} to set up their admin account.`
+              : "This will activate the organisation on a 14-day trial."
+          }
+          confirmLabel="Approve"
+          variant="default"
+          onConfirm={handleApprove}
+        />
+      ) : (
+        <>
+          <div className="flex items-center gap-2">
+            <Select value={plan} onValueChange={(v) => setPlan(v as PlatformPlanName)}>
+              <SelectTrigger className="w-36">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="STARTER">Starter</SelectItem>
+                <SelectItem value="GROWTH">Growth</SelectItem>
+                <SelectItem value="PRO">Pro</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button
+              size="sm"
+              onClick={handleChangePlan}
+              disabled={isChangingPlan || plan === org.subscriptionPlan}
+            >
+              Update Plan
+            </Button>
+          </div>
 
-      <ConfirmDialog
-        trigger={
-          <Button size="sm" variant={isSuspended ? "outline" : "destructive"}>
-            {isSuspended ? <RefreshCw className="mr-2 h-4 w-4" /> : <Ban className="mr-2 h-4 w-4" />}
-            {isSuspended ? "Reactivate" : "Suspend"}
-          </Button>
-        }
-        title={isSuspended ? "Reactivate Organization?" : "Suspend Organization?"}
-        description={
-          isSuspended
-            ? "This will restore access for all users in this organization."
-            : "This will immediately block all users in this organization from logging in."
-        }
-        confirmLabel={isSuspended ? "Reactivate" : "Suspend"}
-        variant={isSuspended ? "default" : "destructive"}
-        onConfirm={() => updateOrg({ status: isSuspended ? "ACTIVE" : "SUSPENDED" })}
-      />
+          <ConfirmDialog
+            trigger={
+              <Button size="sm" variant={isSuspended ? "outline" : "destructive"}>
+                {isSuspended ? (
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                ) : (
+                  <Ban className="mr-2 h-4 w-4" />
+                )}
+                {isSuspended ? "Reactivate" : "Suspend"}
+              </Button>
+            }
+            title={isSuspended ? "Reactivate Organisation?" : "Suspend Organisation?"}
+            description={
+              isSuspended
+                ? "This will restore access for all users in this organisation."
+                : "This will immediately block all users in this organisation from logging in."
+            }
+            confirmLabel={isSuspended ? "Reactivate" : "Suspend"}
+            variant={isSuspended ? "default" : "destructive"}
+            onConfirm={() => updateOrg({ status: isSuspended ? "ACTIVE" : "SUSPENDED" })}
+          />
+        </>
+      )}
     </div>
   );
 }
