@@ -1,0 +1,369 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum Role {
+  SUPER_ADMIN
+  ORG_ADMIN
+  TRAINER
+  CLIENT
+}
+
+enum OrgStatus {
+  ACTIVE
+  TRIAL
+  SUSPENDED
+  CANCELLED
+}
+
+enum SubscriptionStatus {
+  TRIAL
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+}
+
+enum PlatformPlanName {
+  STARTER
+  GROWTH
+  PRO
+}
+
+enum ClientGoal {
+  WEIGHT_LOSS
+  MUSCLE_GAIN
+  TRANSFORMATION
+  FITNESS
+}
+
+enum ClientStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+enum FormVideoStatus {
+  PENDING
+  REVIEWED
+}
+
+enum NotificationType {
+  VIDEO_UPLOADED
+  VIDEO_REVIEWED
+  CHECKIN_SUBMITTED
+  PAYMENT_RECEIVED
+  NEW_MESSAGE
+  PLAN_EXPIRING
+  PROGRAM_ASSIGNED
+  PAYMENT_DUE
+  PAYMENT_CONFIRMED
+  NEW_ORG_SIGNUP
+  TRAINER_ADDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum PlanInterval {
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+enum InviteRole {
+  ORG_ADMIN
+  TRAINER
+  CLIENT
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+model Organization {
+  id                   String             @id @default(cuid())
+  name                 String
+  slug                 String             @unique
+  logo                 String?
+  email                String
+  phone                String?
+  address              String?
+  status               OrgStatus          @default(TRIAL)
+  trialEndsAt          DateTime?
+  stripeCustomerId     String?            @unique
+  subscriptionStatus   SubscriptionStatus @default(TRIAL)
+  subscriptionPlan     PlatformPlanName   @default(STARTER)
+  maxTrainers          Int                @default(3)
+  maxClients           Int                @default(30)
+  createdAt            DateTime           @default(now())
+  createdBy            String?
+
+  users                User[]
+  invites              OrgInvite[]
+  clientPayments       ClientPayment[]
+  subscriptionPlans    OrgSubscriptionPlan[]
+  messages             Message[]
+
+  @@map("organizations")
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  password       String?
+  role           Role
+  organizationId String?
+  name           String
+  phone          String?
+  avatar         String?
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+
+  organization   Organization?   @relation(fields: [organizationId], references: [id])
+  trainerProfile TrainerProfile?
+  clientProfile  ClientProfile?
+
+  // Check-ins authored as trainer
+  trainerCheckIns    CheckIn[] @relation("TrainerCheckIns")
+  // Check-ins submitted as client
+  clientCheckIns     CheckIn[] @relation("ClientCheckIns")
+
+  // Programs created as trainer
+  trainerPrograms    WorkoutProgram[] @relation("TrainerPrograms")
+  // Programs assigned as client
+  clientPrograms     WorkoutProgram[] @relation("ClientPrograms")
+
+  // Videos as client
+  clientVideos       FormVideo[] @relation("ClientVideos")
+  // Videos as trainer reviewer
+  trainerVideos      FormVideo[] @relation("TrainerVideos")
+
+  sentMessages       Message[]      @relation("SentMessages")
+  receivedMessages   Message[]      @relation("ReceivedMessages")
+  notifications      Notification[]
+
+  progressMeasurements ProgressMeasurement[]
+
+  @@map("users")
+}
+
+model TrainerProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  bio             String?
+  specializations String[]
+  salary          Float?
+  joinedAt        DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("trainer_profiles")
+}
+
+model ClientProfile {
+  id                String       @id @default(cuid())
+  userId            String       @unique
+  assignedTrainerId String?
+  goal              ClientGoal?
+  startWeight       Float?
+  currentWeight     Float?
+  targetWeight      Float?
+  height            Float?
+  startDate         DateTime?
+  status            ClientStatus @default(ACTIVE)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("client_profiles")
+}
+
+model CheckIn {
+  id             String   @id @default(cuid())
+  clientId       String
+  trainerId      String?
+  date           DateTime @db.Date
+  weight         Float?
+  energyLevel    Int?
+  sleepHours     Float?
+  dietAdherence  Int?
+  clientNotes    String?
+  trainerNotes   String?
+  createdAt      DateTime @default(now())
+
+  client  User  @relation("ClientCheckIns", fields: [clientId], references: [id])
+  trainer User? @relation("TrainerCheckIns", fields: [trainerId], references: [id])
+
+  @@unique([clientId, date])
+  @@map("check_ins")
+}
+
+model WorkoutProgram {
+  id          String    @id @default(cuid())
+  trainerId   String
+  clientId    String
+  title       String
+  description String?
+  startDate   DateTime  @db.Date
+  endDate     DateTime? @db.Date
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+
+  trainer User         @relation("TrainerPrograms", fields: [trainerId], references: [id])
+  client  User         @relation("ClientPrograms", fields: [clientId], references: [id])
+  days    WorkoutDay[]
+
+  @@map("workout_programs")
+}
+
+model WorkoutDay {
+  id        String @id @default(cuid())
+  programId String
+  dayNumber Int
+  title     String
+  exercises Json   @default("[]")
+
+  program WorkoutProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@unique([programId, dayNumber])
+  @@map("workout_days")
+}
+
+model FormVideo {
+  id              String          @id @default(cuid())
+  clientId        String
+  trainerId       String?
+  s3Url           String
+  thumbnailUrl    String?
+  exerciseName    String
+  description     String?
+  uploadedAt      DateTime        @default(now())
+  status          FormVideoStatus @default(PENDING)
+  trainerFeedback String?
+  feedbackAt      DateTime?
+
+  client  User  @relation("ClientVideos", fields: [clientId], references: [id])
+  trainer User? @relation("TrainerVideos", fields: [trainerId], references: [id])
+
+  @@map("form_videos")
+}
+
+model Message {
+  id             String    @id @default(cuid())
+  senderId       String
+  receiverId     String
+  organizationId String
+  content        String
+  readAt         DateTime?
+  createdAt      DateTime  @default(now())
+
+  sender       User         @relation("SentMessages", fields: [senderId], references: [id])
+  receiver     User         @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@map("messages")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String
+  isRead    Boolean          @default(false)
+  relatedId String?
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model ClientPayment {
+  id                    String        @id @default(cuid())
+  clientId              String
+  organizationId        String
+  stripePaymentIntentId String?       @unique
+  amount                Int           // in cents
+  currency              String        @default("usd")
+  status                PaymentStatus @default(PENDING)
+  planName              String?
+  createdAt             DateTime      @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@map("client_payments")
+}
+
+model OrgSubscriptionPlan {
+  id             String       @id @default(cuid())
+  organizationId String
+  name           String
+  price          Int          // in cents
+  interval       PlanInterval @default(MONTHLY)
+  features       Json         @default("[]")
+  stripeProductId String?
+  stripePriceId  String?
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@map("org_subscription_plans")
+}
+
+model PlatformPlan {
+  id              String           @id @default(cuid())
+  name            PlatformPlanName @unique
+  price           Int              // in cents/month
+  maxTrainers     Int
+  maxClients      Int
+  features        Json             @default("[]")
+  stripeProductId String?
+  stripePriceId   String?
+
+  @@map("platform_plans")
+}
+
+model OrgInvite {
+  id             String     @id @default(cuid())
+  email          String
+  organizationId String
+  role           InviteRole
+  token          String     @unique @default(cuid())
+  expiresAt      DateTime
+  acceptedAt     DateTime?
+  createdAt      DateTime   @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@map("org_invites")
+}
+
+model ProgressMeasurement {
+  id        String   @id @default(cuid())
+  clientId  String
+  date      DateTime @db.Date
+  weight    Float?
+  waist     Float?
+  chest     Float?
+  arms      Float?
+  hips      Float?
+  thighs    Float?
+  notes     String?
+  photoUrl  String?
+  createdAt DateTime @default(now())
+
+  client User @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("progress_measurements")
+}
