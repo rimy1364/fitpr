@@ -17,7 +17,7 @@ export default async function LoginPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-4">
             <Dumbbell className="w-8 h-8 text-primary-foreground" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">FitOS</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">FitPR</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-2">
             The fitness platform for modern organizations
           </p>

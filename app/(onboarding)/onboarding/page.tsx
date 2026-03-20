@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { OnboardingWizard } from "./onboarding-wizard";
 
-export const metadata = { title: "Welcome to FitOS" };
+export const metadata = { title: "Welcome to FitPR" };
 
 export default async function OnboardingPage() {
   const session = await getServerSession(authOptions);

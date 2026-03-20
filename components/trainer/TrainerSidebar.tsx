@@ -21,7 +21,7 @@ export function TrainerSidebar() {
           <Dumbbell className="h-4 w-4 text-primary-foreground" />
         </div>
         <div>
-          <p className="text-sm font-bold">FitOS</p>
+          <p className="text-sm font-bold">FitPR</p>
           <p className="text-xs text-muted-foreground">Trainer</p>
         </div>
       </div>

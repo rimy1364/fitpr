@@ -26,7 +26,7 @@ export function AdminSidebar() {
           <Dumbbell className="h-4 w-4 text-primary-foreground" />
         </div>
         <div className="min-w-0">
-          <p className="text-sm font-bold truncate">{session?.user.name ?? "FitOS"}</p>
+          <p className="text-sm font-bold truncate">{session?.user.name ?? "FitPR"}</p>
           <p className="text-xs text-muted-foreground">Org Admin</p>
         </div>
       </div>

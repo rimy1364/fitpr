@@ -7,7 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: { default: "FitOS", template: "%s | FitOS" },
+  title: { default: "FitPR", template: "%s | FitPR" },
   description: "The fitness platform for modern training organizations.",
 };
 

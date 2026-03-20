@@ -5,7 +5,7 @@ function getResend() {
   return new Resend(process.env.RESEND_API_KEY);
 }
 
-const FROM = process.env.RESEND_FROM_EMAIL ?? "noreply@fitos.com";
+const FROM = process.env.RESEND_FROM_EMAIL ?? "noreply@fitpr.com";
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
 interface InviteEmailParams {
@@ -21,7 +21,7 @@ export async function sendInviteEmail({ to, name, orgName, role, setupUrl }: Inv
 
   const html = `
     <div style="font-family: sans-serif; max-width: 560px; margin: 0 auto;">
-      <h2 style="color: #1e40af;">Welcome to ${orgName} on FitOS!</h2>
+      <h2 style="color: #1e40af;">Welcome to ${orgName} on FitPR!</h2>
       <p>Hi ${name},</p>
       <p>You've been invited as a <strong>${roleLabel}</strong> to <strong>${orgName}</strong>.</p>
       <p>Click the button below to set up your account. This link expires in 48 hours.</p>
@@ -30,7 +30,7 @@ export async function sendInviteEmail({ to, name, orgName, role, setupUrl }: Inv
       </a>
       <p style="color: #6b7280; font-size: 14px;">Or copy this link: ${setupUrl}</p>
       <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
-      <p style="color: #9ca3af; font-size: 12px;">FitOS — The fitness platform for modern organizations.</p>
+      <p style="color: #9ca3af; font-size: 12px;">FitPR — The fitness platform for modern organizations.</p>
     </div>
   `;
 
@@ -38,7 +38,7 @@ export async function sendInviteEmail({ to, name, orgName, role, setupUrl }: Inv
     await getResend()?.emails.send({
       from: FROM,
       to,
-      subject: `You're invited to ${orgName} on FitOS`,
+      subject: `You're invited to ${orgName} on FitPR`,
       html,
     });
   } catch (err) {
@@ -50,7 +50,7 @@ export async function sendInviteEmail({ to, name, orgName, role, setupUrl }: Inv
 export async function sendWelcomeEmail(to: string, name: string) {
   const html = `
     <div style="font-family: sans-serif; max-width: 560px; margin: 0 auto;">
-      <h2 style="color: #1e40af;">Welcome to FitOS, ${name}!</h2>
+      <h2 style="color: #1e40af;">Welcome to FitPR, ${name}!</h2>
       <p>Your account is ready. Let's start your fitness journey.</p>
       <a href="${APP_URL}/login" style="display: inline-block; margin: 24px 0; padding: 12px 24px; background: #2563eb; color: white; border-radius: 6px; text-decoration: none; font-weight: bold;">
         Go to Dashboard
@@ -58,7 +58,7 @@ export async function sendWelcomeEmail(to: string, name: string) {
     </div>
   `;
 
-  await getResend()?.emails.send({ from: FROM, to, subject: "Welcome to FitOS!", html }).catch(console.error);
+  await getResend()?.emails.send({ from: FROM, to, subject: "Welcome to FitPR!", html }).catch(console.error);
 }
 
 export async function sendVideoReviewedEmail(to: string, clientName: string, exerciseName: string) {
@@ -93,7 +93,7 @@ export async function sendPaymentReceiptEmail(to: string, clientName: string, am
     </div>
   `;
 
-  await getResend()?.emails.send({ from: FROM, to, subject: "Payment Confirmed — FitOS", html }).catch(console.error);
+  await getResend()?.emails.send({ from: FROM, to, subject: "Payment Confirmed — FitPR", html }).catch(console.error);
 }
 
 export async function sendCheckInReminderEmail(to: string, clientName: string) {
@@ -108,5 +108,5 @@ export async function sendCheckInReminderEmail(to: string, clientName: string) {
     </div>
   `;
 
-  await getResend()?.emails.send({ from: FROM, to, subject: "Daily Check-In Reminder — FitOS", html }).catch(console.error);
+  await getResend()?.emails.send({ from: FROM, to, subject: "Daily Check-In Reminder — FitPR", html }).catch(console.error);
 }

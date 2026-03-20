@@ -9,7 +9,7 @@ const s3 = new S3Client({
   },
 });
 
-const BUCKET = process.env.AWS_S3_BUCKET ?? "fitos-uploads";
+const BUCKET = process.env.AWS_S3_BUCKET ?? "fitpr-uploads";
 
 export async function getPresignedUploadUrl(
   key: string,

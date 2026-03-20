@@ -3,7 +3,15 @@
     "allow": [
       "Bash(npm install:*)",
       "Bash(npx prisma:*)",
-      "Bash(npx next:*)"
+      "Bash(npx next:*)",
+      "Bash(vercel --yes)",
+      "Bash(vercel --yes --name fitos-app)",
+      "Bash(vercel env:*)",
+      "Bash(grep -r \"FitOS\\\\|fitos\\\\|FITOS\" d:/FitPR --include=*.ts --include=*.tsx --include=*.js --include=*.json --include=*.md -l)",
+      "Bash(xargs grep:*)",
+      "Bash(DIRECT_URL=\"postgresql://postgres:bR9w!2x81364@db.kexxdqrrcibwakwketxu.supabase.co:5432/postgres\" DATABASE_URL=\"postgresql://postgres.kexxdqrrcibwakwketxu:bR9w!2x81364@aws-1-ap-south-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1\" npx prisma db push)",
+      "Bash(DIRECT_URL=\"postgresql://postgres:bR9w!2x81364@db.kexxdqrrcibwakwketxu.supabase.co:5432/postgres\" DATABASE_URL=\"postgresql://postgres.kexxdqrrcibwakwketxu:bR9w!2x81364@aws-1-ap-south-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1\" npx prisma db seed)",
+      "Bash(vercel --prod --yes)"
     ]
   }
 }

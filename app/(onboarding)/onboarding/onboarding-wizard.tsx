@@ -44,7 +44,7 @@ export function OnboardingWizard({ userName }: Props) {
         body: JSON.stringify({ ...step1Data, ...data }),
       });
       if (!res.ok) throw new Error();
-      toast({ title: "Welcome to FitOS!", description: "Your profile is all set." });
+      toast({ title: "Welcome to FitPR!", description: "Your profile is all set." });
       router.push("/client/dashboard");
     } catch {
       toast({ variant: "destructive", title: "Error", description: "Something went wrong." });
@@ -62,7 +62,7 @@ export function OnboardingWizard({ userName }: Props) {
         <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary mb-4">
           <Dumbbell className="h-7 w-7 text-primary-foreground" />
         </div>
-        <h1 className="text-2xl font-bold">Welcome to FitOS!</h1>
+        <h1 className="text-2xl font-bold">Welcome to FitPR!</h1>
         <p className="text-muted-foreground">Let's set up your profile. Step {step} of {TOTAL_STEPS}</p>
       </div>
 
