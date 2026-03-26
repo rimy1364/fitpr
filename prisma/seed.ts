@@ -27,7 +27,7 @@ async function main() {
     update: {},
     create: {
       name: "STARTER",
-      price: 4900, // $49/month
+      price: 490000, // ₹4,900/month
       maxTrainers: 3,
       maxClients: 30,
       features: ["Basic analytics", "Email support", "Up to 3 trainers"],
@@ -39,7 +39,7 @@ async function main() {
     update: {},
     create: {
       name: "GROWTH",
-      price: 9900, // $99/month
+      price: 990000, // ₹9,900/month
       maxTrainers: 10,
       maxClients: 100,
       features: [
@@ -56,7 +56,7 @@ async function main() {
     update: {},
     create: {
       name: "PRO",
-      price: 19900, // $199/month
+      price: 1990000, // ₹19,900/month
       maxTrainers: -1, // unlimited
       maxClients: -1, // unlimited
       features: [

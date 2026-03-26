@@ -262,7 +262,7 @@ export default async function HomePage() {
             {[
               {
                 name: "Starter",
-                price: 49,
+                price: 4900,
                 popular: false,
                 desc: "Perfect for small gyms just getting started",
                 features: [
@@ -276,7 +276,7 @@ export default async function HomePage() {
               },
               {
                 name: "Growth",
-                price: 99,
+                price: 9900,
                 popular: true,
                 desc: "For growing fitness businesses",
                 features: [
@@ -290,7 +290,7 @@ export default async function HomePage() {
               },
               {
                 name: "Pro",
-                price: 199,
+                price: 19900,
                 popular: false,
                 desc: "Unlimited scale for large accounts",
                 features: [
@@ -319,7 +319,7 @@ export default async function HomePage() {
                 <h3 className="font-bold text-xl text-white">{p.name}</h3>
                 <p className="text-gray-400 text-sm mt-1">{p.desc}</p>
                 <div className="mt-5 mb-6">
-                  <span className="text-4xl font-extrabold text-white">${p.price}</span>
+                  <span className="text-4xl font-extrabold text-white">₹{p.price.toLocaleString("en-IN")}</span>
                   <span className="text-gray-500 text-sm">/month</span>
                 </div>
                 <ul className="space-y-3 mb-8">

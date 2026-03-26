@@ -16,8 +16,8 @@ export function formatRelativeTime(date: Date | string) {
 
 export function formatCurrency(
   cents: number,
-  currency = "usd",
-  locale = "en-US"
+  currency = "inr",
+  locale = "en-IN"
 ) {
   return new Intl.NumberFormat(locale, {
     style: "currency",
