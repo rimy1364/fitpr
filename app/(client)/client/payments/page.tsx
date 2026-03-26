@@ -83,7 +83,7 @@ export default async function ClientPaymentsPage({ searchParams }: Props) {
                     <p className="text-xs text-muted-foreground">{formatDate(p.createdAt)}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold">{formatCurrency(p.amount, p.currency)}</span>
+                    <span className="font-semibold">{formatCurrency(p.amount)}</span>
                     <StatusBadge status={p.status} />
                   </div>
                 </div>

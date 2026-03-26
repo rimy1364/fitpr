@@ -297,7 +297,7 @@ model ClientPayment {
   organizationId        String
   stripePaymentIntentId String?       @unique
   amount                Int           // in cents
-  currency              String        @default("usd")
+  currency              String        @default("inr")
   status                PaymentStatus @default(PENDING)
   planName              String?
   createdAt             DateTime      @default(now())

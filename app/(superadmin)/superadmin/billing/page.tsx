@@ -185,7 +185,7 @@ export default async function BillingPage() {
                     <tr key={p.id} className="border-b last:border-0 hover:bg-muted/30 transition-colors">
                       <td className="px-4 py-3 font-medium">{p.organization.name}</td>
                       <td className="px-4 py-3 text-muted-foreground">{p.planName ?? "—"}</td>
-                      <td className="px-4 py-3 font-semibold">{formatCurrency(p.amount, p.currency)}</td>
+                      <td className="px-4 py-3 font-semibold">{formatCurrency(p.amount)}</td>
                       <td className="px-4 py-3"><StatusBadge status={p.status} /></td>
                       <td className="px-4 py-3 text-muted-foreground">{formatDate(p.createdAt)}</td>
                     </tr>
