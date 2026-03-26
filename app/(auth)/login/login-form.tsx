@@ -46,14 +46,13 @@ export function LoginForm() {
         toast({
           variant: "destructive",
           title: "Sign in failed",
-          description:
-            result.error === "Account is suspended or inactive."
-              ? result.error
-              : "Invalid email or password.",
+          description: result.error.includes("suspended") || result.error.includes("inactive")
+            ? "This account is suspended or inactive. Contact support."
+            : "Invalid email or password.",
         });
-      } else if (result?.url) {
-        router.push(result.url);
-        router.refresh();
+      } else if (result?.ok) {
+        // Force full reload so server session is established before navigation
+        window.location.href = callbackUrl ?? "/";
       }
     } finally {
       setIsLoading(false);

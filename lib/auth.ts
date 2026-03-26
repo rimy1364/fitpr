@@ -68,8 +68,8 @@ export const authOptions: NextAuthOptions = {
             where: { id: user.organizationId },
             select: { status: true },
           });
-          if (!org || org.status === "SUSPENDED" || org.status === "CANCELLED") {
-            throw new Error("Organization is suspended or inactive.");
+          if (!org || org.status === "SUSPENDED" || org.status === "CANCELLED" || org.status === "PENDING") {
+            throw new Error("Account is suspended or inactive.");
           }
         }
 
