@@ -30,13 +30,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Check if this org email already submitted a pending application
-  const existingOrg = await prisma.organization.findFirst({
-    where: { email, status: "PENDING" },
-  });
+  // Check org email is globally unique (any status)
+  const existingOrg = await prisma.organization.findUnique({ where: { email } });
   if (existingOrg) {
     return NextResponse.json(
-      { error: "An application with this account email is already under review." },
+      { error: "An organisation with this email already exists." },
       { status: 409 }
     );
   }

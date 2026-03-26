@@ -45,6 +45,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Slug is already taken" }, { status: 409 });
   }
 
+  // Check org email uniqueness
+  const existingOrg = await prisma.organization.findUnique({ where: { email } });
+  if (existingOrg) {
+    return NextResponse.json({ error: "An organisation with this email already exists" }, { status: 409 });
+  }
+
   // Check admin email doesn't exist
   const existingUser = await prisma.user.findUnique({ where: { email: adminEmail } });
   if (existingUser) {
