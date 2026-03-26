@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import { authOptions, getDefaultRedirect } from "@/lib/auth";
 import Link from "next/link";
 import {
@@ -28,21 +28,21 @@ export default async function HomePage() {
   if (session?.user) redirect(getDefaultRedirect(session.user.role));
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-950 text-white">
       {/* ── Navbar ─────────────────────────────────────────── */}
-      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100">
+      <nav className="sticky top-0 z-50 bg-gray-950/90 backdrop-blur border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Dumbbell className="h-7 w-7 text-emerald-500" />
-            <span className="text-xl font-bold tracking-tight">FitPR</span>
+            <span className="text-xl font-bold tracking-tight text-white">FitPR</span>
           </div>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
-            <a href="#features" className="hover:text-gray-900 transition-colors">Features</a>
-            <a href="#roles" className="hover:text-gray-900 transition-colors">How It Works</a>
-            <a href="#pricing" className="hover:text-gray-900 transition-colors">Pricing</a>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+            <a href="#features" className="hover:text-white transition-colors">Features</a>
+            <a href="#roles" className="hover:text-white transition-colors">How It Works</a>
+            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
+            <Button variant="ghost" size="sm" className="text-gray-300 hover:text-white" asChild>
               <Link href="/login">Sign In</Link>
             </Button>
             <Button size="sm" className="bg-emerald-500 hover:bg-emerald-600 text-white" asChild>
@@ -53,18 +53,18 @@ export default async function HomePage() {
       </nav>
 
       {/* ── Hero ───────────────────────────────────────────── */}
-      <section className="bg-gradient-to-b from-emerald-50 via-white to-white pt-24 pb-20 px-4">
+      <section className="bg-gradient-to-b from-gray-900 to-gray-950 pt-24 pb-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 text-sm font-medium px-4 py-1.5 rounded-full mb-8">
+          <div className="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-400 text-sm font-medium px-4 py-1.5 rounded-full mb-8 border border-emerald-500/20">
             <Zap className="h-4 w-4" />
             The all-in-one fitness management platform
           </div>
-          <h1 className="text-5xl sm:text-6xl font-extrabold text-gray-900 mb-6 leading-tight tracking-tight">
+          <h1 className="text-5xl sm:text-6xl font-extrabold text-white mb-6 leading-tight tracking-tight">
             Manage Your Fitness
             <br />
             <span className="text-emerald-500">Business Smarter</span>
           </h1>
-          <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
             One platform for admins, trainers, and clients. Build personalised programs, track
             progress, review form videos, and grow your fitness business.
           </p>
@@ -79,18 +79,23 @@ export default async function HomePage() {
                 <ChevronRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="text-base" asChild>
+            <Button
+              size="lg"
+              variant="outline"
+              className="text-base border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white"
+              asChild
+            >
               <Link href="/login">Sign In to Dashboard</Link>
             </Button>
           </div>
-          <p className="text-sm text-gray-400 mt-5">
+          <p className="text-sm text-gray-500 mt-5">
             14-day free trial · No credit card required · Cancel any time
           </p>
         </div>
       </section>
 
       {/* ── Stats bar ──────────────────────────────────────── */}
-      <section className="border-y bg-gray-50 py-12 px-4">
+      <section className="border-y border-gray-800 bg-gray-900/50 py-12 px-4">
         <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
             { value: "500+", label: "Accounts" },
@@ -100,7 +105,7 @@ export default async function HomePage() {
           ].map((s) => (
             <div key={s.label}>
               <div className="text-3xl font-extrabold text-emerald-500">{s.value}</div>
-              <div className="text-sm text-gray-500 mt-1">{s.label}</div>
+              <div className="text-sm text-gray-400 mt-1">{s.label}</div>
             </div>
           ))}
         </div>
@@ -110,10 +115,10 @@ export default async function HomePage() {
       <section id="features" className="py-24 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-white mb-4">
               Everything You Need to Run Your Gym
             </h2>
-            <p className="text-gray-600 max-w-xl mx-auto">
+            <p className="text-gray-400 max-w-xl mx-auto">
               From client onboarding to progress reporting, FitPR covers every aspect of your
               fitness business in one place.
             </p>
@@ -153,13 +158,13 @@ export default async function HomePage() {
             ].map((f) => (
               <div
                 key={f.title}
-                className="rounded-2xl border border-gray-100 p-6 hover:shadow-md hover:border-emerald-100 transition-all"
+                className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6 hover:border-emerald-800 hover:bg-gray-900 transition-all"
               >
-                <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-4">
-                  <f.icon className="h-6 w-6 text-emerald-600" />
+                <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-4 border border-emerald-500/20">
+                  <f.icon className="h-6 w-6 text-emerald-500" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{f.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{f.desc}</p>
+                <h3 className="font-semibold text-white mb-2">{f.title}</h3>
+                <p className="text-sm text-gray-400 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -218,11 +223,9 @@ export default async function HomePage() {
                 ],
               },
             ].map((r) => (
-              <div key={r.role} className="bg-gray-800 rounded-2xl p-6">
+              <div key={r.role} className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
                 <div className="flex items-center gap-3 mb-5">
-                  <div
-                    className={`w-10 h-10 ${r.color} rounded-lg flex items-center justify-center`}
-                  >
+                  <div className={`w-10 h-10 ${r.color} rounded-lg flex items-center justify-center`}>
                     <r.icon className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -247,13 +250,11 @@ export default async function HomePage() {
       </section>
 
       {/* ── Pricing ────────────────────────────────────────── */}
-      <section id="pricing" className="py-24 px-4">
+      <section id="pricing" className="py-24 px-4 bg-gray-950">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Simple, Transparent Pricing
-            </h2>
-            <p className="text-gray-600">
+            <h2 className="text-3xl font-bold text-white mb-4">Simple, Transparent Pricing</h2>
+            <p className="text-gray-400">
               Choose the plan that fits your business. All plans include a 14-day free trial.
             </p>
           </div>
@@ -306,8 +307,8 @@ export default async function HomePage() {
                 key={p.name}
                 className={`rounded-2xl border p-6 relative ${
                   p.popular
-                    ? "border-emerald-500 shadow-xl shadow-emerald-50 scale-105"
-                    : "border-gray-200"
+                    ? "border-emerald-500 bg-gray-900 shadow-xl shadow-emerald-500/10 scale-105"
+                    : "border-gray-800 bg-gray-900/50"
                 }`}
               >
                 {p.popular && (
@@ -315,15 +316,15 @@ export default async function HomePage() {
                     Most Popular
                   </div>
                 )}
-                <h3 className="font-bold text-xl text-gray-900">{p.name}</h3>
-                <p className="text-gray-500 text-sm mt-1">{p.desc}</p>
+                <h3 className="font-bold text-xl text-white">{p.name}</h3>
+                <p className="text-gray-400 text-sm mt-1">{p.desc}</p>
                 <div className="mt-5 mb-6">
-                  <span className="text-4xl font-extrabold text-gray-900">${p.price}</span>
+                  <span className="text-4xl font-extrabold text-white">${p.price}</span>
                   <span className="text-gray-500 text-sm">/month</span>
                 </div>
                 <ul className="space-y-3 mb-8">
                   {p.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2.5 text-sm text-gray-600">
+                    <li key={f} className="flex items-center gap-2.5 text-sm text-gray-400">
                       <Check className="h-4 w-4 text-emerald-500 flex-shrink-0" />
                       {f}
                     </li>
@@ -331,7 +332,9 @@ export default async function HomePage() {
                 </ul>
                 <Button
                   className={`w-full ${
-                    p.popular ? "bg-emerald-500 hover:bg-emerald-600 text-white" : ""
+                    p.popular
+                      ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                      : "border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white"
                   }`}
                   variant={p.popular ? "default" : "outline"}
                   asChild
@@ -371,7 +374,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── Footer ─────────────────────────────────────────── */}
-      <footer className="bg-gray-900 py-12 px-4">
+      <footer className="bg-gray-900 border-t border-gray-800 py-12 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2">
