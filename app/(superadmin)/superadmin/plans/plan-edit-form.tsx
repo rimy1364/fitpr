@@ -13,7 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Pencil, Loader2 } from "lucide-react";
 
 const schema = z.object({
-  price: z.coerce.number().int().min(0, "Price must be 0 or more"),
+  priceInr: z.coerce.number().min(0, "Price must be 0 or more"),
   maxTrainers: z.coerce.number().int().min(-1, "Use -1 for unlimited"),
   maxClients: z.coerce.number().int().min(-1, "Use -1 for unlimited"),
   features: z.string(),
@@ -24,7 +24,7 @@ type FormData = z.infer<typeof schema>;
 interface Plan {
   id: string;
   name: string;
-  price: number;
+  price: number; // stored in paise
   maxTrainers: number;
   maxClients: number;
   features: unknown;
@@ -39,7 +39,7 @@ export function PlanEditForm({ plan }: { plan: Plan }) {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      price: plan.price,
+      priceInr: plan.price / 100, // convert paise → ₹ for display
       maxTrainers: plan.maxTrainers,
       maxClients: plan.maxClients,
       features: Array.isArray(plan.features) ? (plan.features as string[]).join("\n") : "",
@@ -53,7 +53,7 @@ export function PlanEditForm({ plan }: { plan: Plan }) {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          price: data.price,
+          price: Math.round(data.priceInr * 100), // convert ₹ → paise for storage
           maxTrainers: data.maxTrainers,
           maxClients: data.maxClients,
           features: data.features
@@ -90,10 +90,13 @@ export function PlanEditForm({ plan }: { plan: Plan }) {
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
           <div className="space-y-2">
-            <Label htmlFor="price">Price (cents/month)</Label>
-            <Input id="price" type="number" {...register("price")} />
-            <p className="text-xs text-muted-foreground">e.g. 4900 = $49.00/month</p>
-            {errors.price && <p className="text-xs text-destructive">{errors.price.message}</p>}
+            <Label htmlFor="priceInr">Price (₹/month)</Label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">₹</span>
+              <Input id="priceInr" type="number" step="1" min="0" className="pl-7" {...register("priceInr")} />
+            </div>
+            <p className="text-xs text-muted-foreground">Enter amount in Indian Rupees (e.g. 4900 = ₹4,900/month)</p>
+            {errors.priceInr && <p className="text-xs text-destructive">{errors.priceInr.message}</p>}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
