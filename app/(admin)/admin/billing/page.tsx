@@ -2,9 +2,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/shared/StatusBadge";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { DollarSign, TrendingUp, Users, Calendar } from "lucide-react";
+import { DollarSign, TrendingUp, Users } from "lucide-react";
 
 export const metadata = { title: "Billing — Admin" };
 
@@ -22,7 +22,7 @@ export default async function AdminBillingPage() {
       where: {
         organizationId: orgId,
         status: "PAID",
-        paidAt: { gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1) },
+        createdAt: { gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1) },
       },
       _sum: { amount: true },
     }),
@@ -30,9 +30,6 @@ export default async function AdminBillingPage() {
       where: { organizationId: orgId },
       orderBy: { createdAt: "desc" },
       take: 20,
-      include: {
-        client: { select: { name: true, email: true } },
-      },
     }),
     prisma.user.count({ where: { organizationId: orgId, role: "CLIENT" } }),
   ]);
@@ -63,13 +60,6 @@ export default async function AdminBillingPage() {
       bg: "bg-purple-50 dark:bg-purple-950",
     },
   ];
-
-  const statusColors: Record<string, string> = {
-    PAID: "bg-emerald-100 text-emerald-800",
-    PENDING: "bg-yellow-100 text-yellow-800",
-    FAILED: "bg-red-100 text-red-800",
-    REFUNDED: "bg-gray-100 text-gray-800",
-  };
 
   return (
     <div className="space-y-6">
@@ -105,33 +95,19 @@ export default async function AdminBillingPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-muted-foreground">
-                    <th className="pb-3 text-left font-medium">Client</th>
+                    <th className="pb-3 text-left font-medium">Plan</th>
                     <th className="pb-3 text-left font-medium">Amount</th>
                     <th className="pb-3 text-left font-medium">Status</th>
                     <th className="pb-3 text-left font-medium">Date</th>
-                    <th className="pb-3 text-left font-medium">Notes</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
                   {recentPayments.map((p) => (
-                    <tr key={p.id} className="py-3">
-                      <td className="py-3 pr-4">
-                        <p className="font-medium">{p.client?.name ?? "—"}</p>
-                        <p className="text-xs text-muted-foreground">{p.client?.email}</p>
-                      </td>
+                    <tr key={p.id}>
+                      <td className="py-3 pr-4 text-muted-foreground">{p.planName ?? "—"}</td>
                       <td className="py-3 pr-4 font-medium">{formatCurrency(p.amount)}</td>
-                      <td className="py-3 pr-4">
-                        <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${statusColors[p.status] ?? ""}`}>
-                          {p.status}
-                        </span>
-                      </td>
-                      <td className="py-3 pr-4 text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-3.5 w-3.5" />
-                          {formatDate(p.paidAt ?? p.createdAt)}
-                        </div>
-                      </td>
-                      <td className="py-3 text-muted-foreground text-xs">{p.notes ?? "—"}</td>
+                      <td className="py-3 pr-4"><StatusBadge status={p.status} /></td>
+                      <td className="py-3 text-muted-foreground">{formatDate(p.createdAt)}</td>
                     </tr>
                   ))}
                 </tbody>
