@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Building2, Users, DollarSign, TrendingUp } from "lucide-react";
+import { Building2, Users, IndianRupee, TrendingUp } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import { OrgTable } from "@/components/superadmin/OrgTable";
 
@@ -61,7 +61,7 @@ export default async function SuperAdminDashboard() {
       title: "Total Revenue",
       value: formatCurrency(recentPayments._sum.amount ?? 0),
       sub: "All time (client payments)",
-      icon: DollarSign,
+      icon: IndianRupee,
       color: "text-orange-600",
       bg: "bg-orange-50 dark:bg-orange-950",
     },

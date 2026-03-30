@@ -3,7 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { Users, UserCheck, DollarSign, TrendingUp } from "lucide-react";
+import { Users, UserCheck, IndianRupee, TrendingUp } from "lucide-react";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 
 export const metadata = { title: "Admin Dashboard" };
@@ -35,7 +35,7 @@ export default async function AdminDashboard() {
   const stats = [
     { title: "Total Trainers", value: totalTrainers, sub: `of ${org?.maxTrainers === -1 ? "∞" : org?.maxTrainers} max`, icon: UserCheck, color: "text-blue-600", bg: "bg-blue-50 dark:bg-blue-950" },
     { title: "Total Clients", value: totalClients, sub: `${activeClients} active`, icon: Users, color: "text-green-600", bg: "bg-green-50 dark:bg-green-950" },
-    { title: "Total Revenue", value: formatCurrency(recentPayments._sum.amount ?? 0), sub: "All time", icon: DollarSign, color: "text-purple-600", bg: "bg-purple-50 dark:bg-purple-950" },
+    { title: "Total Revenue", value: formatCurrency(recentPayments._sum.amount ?? 0), sub: "All time", icon: IndianRupee, color: "text-purple-600", bg: "bg-purple-50 dark:bg-purple-950" },
     { title: "Plan", value: org?.subscriptionPlan ?? "—", sub: <StatusBadge status={org?.status ?? "ACTIVE"} />, icon: TrendingUp, color: "text-orange-600", bg: "bg-orange-50 dark:bg-orange-950" },
   ];
 

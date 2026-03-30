@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { DollarSign, TrendingUp, Building2, CreditCard } from "lucide-react";
+import { IndianRupee, TrendingUp, Building2, CreditCard } from "lucide-react";
 
 export const metadata = { title: "Billing Overview" };
 
@@ -75,7 +75,7 @@ export default async function BillingPage() {
     {
       label: "All-time Revenue",
       value: formatCurrency(totalRevenue._sum.amount ?? 0),
-      icon: DollarSign,
+      icon: IndianRupee,
       sub: "From client payments",
     },
     {

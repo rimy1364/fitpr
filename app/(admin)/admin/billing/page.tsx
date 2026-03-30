@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { DollarSign, TrendingUp, Users } from "lucide-react";
+import { IndianRupee, TrendingUp, Users } from "lucide-react";
 
 export const metadata = { title: "Billing — Admin" };
 
@@ -39,7 +39,7 @@ export default async function AdminBillingPage() {
       title: "All-Time Revenue",
       value: formatCurrency(allTimeRevenue._sum.amount ?? 0),
       sub: `${allTimeRevenue._count} payments`,
-      icon: DollarSign,
+      icon: IndianRupee,
       color: "text-emerald-600",
       bg: "bg-emerald-50 dark:bg-emerald-950",
     },
