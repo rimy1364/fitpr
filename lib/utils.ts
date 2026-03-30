@@ -15,14 +15,15 @@ export function formatRelativeTime(date: Date | string) {
 }
 
 export function formatCurrency(
-  cents: number,
+  amount: number,
   currency = "inr",
   locale = "en-IN"
 ) {
   return new Intl.NumberFormat(locale, {
     style: "currency",
     currency: currency.toUpperCase(),
-  }).format(cents / 100);
+    maximumFractionDigits: 0,
+  }).format(amount);
 }
 
 export function generateSlug(name: string) {

@@ -13,7 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Pencil, Loader2 } from "lucide-react";
 
 const schema = z.object({
-  priceInr: z.coerce.number().min(0, "Price must be 0 or more"),
+  price: z.coerce.number().int().min(0, "Price must be 0 or more"),
   maxTrainers: z.coerce.number().int().min(-1, "Use -1 for unlimited"),
   maxClients: z.coerce.number().int().min(-1, "Use -1 for unlimited"),
   features: z.string(),
@@ -24,7 +24,7 @@ type FormData = z.infer<typeof schema>;
 interface Plan {
   id: string;
   name: string;
-  price: number; // stored in paise
+  price: number;
   maxTrainers: number;
   maxClients: number;
   features: unknown;
@@ -39,7 +39,7 @@ export function PlanEditForm({ plan }: { plan: Plan }) {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      priceInr: plan.price / 100, // convert paise → ₹ for display
+      price: plan.price,
       maxTrainers: plan.maxTrainers,
       maxClients: plan.maxClients,
       features: Array.isArray(plan.features) ? (plan.features as string[]).join("\n") : "",
@@ -53,13 +53,10 @@ export function PlanEditForm({ plan }: { plan: Plan }) {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          price: Math.round(data.priceInr * 100), // convert ₹ → paise for storage
+          price: data.price,
           maxTrainers: data.maxTrainers,
           maxClients: data.maxClients,
-          features: data.features
-            .split("\n")
-            .map((f) => f.trim())
-            .filter(Boolean),
+          features: data.features.split("\n").map((f) => f.trim()).filter(Boolean),
         }),
       });
       if (!res.ok) {
@@ -90,13 +87,13 @@ export function PlanEditForm({ plan }: { plan: Plan }) {
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
           <div className="space-y-2">
-            <Label htmlFor="priceInr">Price (₹/month)</Label>
+            <Label htmlFor="price">Price (₹/month)</Label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">₹</span>
-              <Input id="priceInr" type="number" step="1" min="0" className="pl-7" {...register("priceInr")} />
+              <Input id="price" type="number" step="1" min="0" className="pl-7" {...register("price")} />
             </div>
-            <p className="text-xs text-muted-foreground">Enter amount in Indian Rupees (e.g. 4900 = ₹4,900/month)</p>
-            {errors.priceInr && <p className="text-xs text-destructive">{errors.priceInr.message}</p>}
+            <p className="text-xs text-muted-foreground">Enter amount in Indian Rupees (e.g. 4900)</p>
+            {errors.price && <p className="text-xs text-destructive">{errors.price.message}</p>}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -122,7 +119,6 @@ export function PlanEditForm({ plan }: { plan: Plan }) {
               placeholder={"Workout Programs\nProgress Charts\nEmail Support"}
               {...register("features")}
             />
-            {errors.features && <p className="text-xs text-destructive">{errors.features.message}</p>}
           </div>
 
           <div className="flex justify-end gap-2">

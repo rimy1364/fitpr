@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import Link from "next/link";
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -89,7 +90,12 @@ export function LoginForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password">Password</Label>
+              <Link href="/forgot-password" className="text-xs text-muted-foreground hover:text-foreground">
+                Forgot password?
+              </Link>
+            </div>
             <div className="relative">
               <Input
                 id="password"
