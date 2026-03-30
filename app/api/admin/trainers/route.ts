@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 });
   }
 
-  const { name, email, password, phone, bio, specializations, salary } = parsed.data;
+  const { name, email, password, phone, bio, specializations, perClientFee } = parsed.data;
 
   // Check org trainer limit
   const [org, trainerCount] = await Promise.all([
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
   });
 
   await prisma.trainerProfile.create({
-    data: { userId: user.id, bio, specializations, salary },
+    data: { userId: user.id, bio, specializations, perClientFee },
   });
 
   return NextResponse.json({ data: user }, { status: 201 });

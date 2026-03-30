@@ -165,7 +165,7 @@ model TrainerProfile {
   userId          String   @unique
   bio             String?
   specializations String[]
-  salary          Float?
+  perClientFee    Int?     // salary per client per month (INR)
   joinedAt        DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

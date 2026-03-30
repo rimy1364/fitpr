@@ -3,15 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Users, UserCheck, CreditCard, DollarSign, Settings, Dumbbell } from "lucide-react";
+import { LayoutDashboard, Users, UserCheck, IndianRupee, Settings, Dumbbell } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 const navItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/trainers", label: "Trainers", icon: UserCheck },
   { href: "/admin/clients", label: "Clients", icon: Users },
-  { href: "/admin/plans", label: "Plans", icon: CreditCard },
-  { href: "/admin/billing", label: "Billing", icon: DollarSign },
+  { href: "/admin/billing", label: "Billing", icon: IndianRupee },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 

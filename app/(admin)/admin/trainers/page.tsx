@@ -116,7 +116,11 @@ export default async function TrainersPage() {
                     <Users className="h-3.5 w-3.5" />
                     {clientCountMap[trainer.id] ?? 0} clients
                   </span>
-                  <span>Joined {formatDate(trainer.createdAt)}</span>
+                  {trainer.trainerProfile?.perClientFee != null && (
+                    <span className="font-medium text-foreground">
+                      ₹{((clientCountMap[trainer.id] ?? 0) * trainer.trainerProfile.perClientFee).toLocaleString("en-IN")}/mo
+                    </span>
+                  )}
                 </div>
 
                 <Button variant="outline" size="sm" className="mt-4 w-full" asChild>

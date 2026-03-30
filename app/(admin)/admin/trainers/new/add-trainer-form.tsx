@@ -140,13 +140,14 @@ export function AddTrainerForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="salary">Monthly Salary (₹)</Label>
+            <Label htmlFor="perClientFee">Per Client Fee (₹/month)</Label>
             <Input
-              id="salary"
+              id="perClientFee"
               type="number"
-              placeholder="e.g. 25000"
-              {...register("salary", { valueAsNumber: true })}
+              placeholder="e.g. 2000"
+              {...register("perClientFee", { valueAsNumber: true })}
             />
+            <p className="text-xs text-muted-foreground">Salary = this fee × number of assigned clients</p>
           </div>
 
           <div className="flex gap-3 pt-2">

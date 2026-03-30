@@ -56,7 +56,7 @@ export const createTrainerSchema = z.object({
   phone: z.string().optional(),
   bio: z.string().optional(),
   specializations: z.array(z.string()).default([]),
-  salary: z.number().positive().optional(),
+  perClientFee: z.number().int().min(0).optional(),
 });
 
 // ─── Client ───────────────────────────────────────────────────────────────────
