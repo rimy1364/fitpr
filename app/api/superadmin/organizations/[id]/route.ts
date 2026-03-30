@@ -75,7 +75,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
       data: {
         status: "TRIAL",
         subscriptionStatus: "TRIAL",
-        trialEndsAt: addDays(new Date(), 14),
+        trialEndsAt: addDays(new Date(), 7),
         pendingAdminName: null,
         pendingAdminEmail: null,
       },

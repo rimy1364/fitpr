@@ -82,8 +82,8 @@ export function OrgDetailActions({ org }: { org: Org }) {
           title="Approve Account?"
           description={
             org.pendingAdminEmail
-              ? `This will activate the account on a 14-day trial and send an invite to ${org.pendingAdminEmail} to set up their admin account.`
-              : "This will activate the account on a 14-day trial."
+              ? `This will activate the account on a 7-day trial and send an invite to ${org.pendingAdminEmail} to set up their admin account.`
+              : "This will activate the account on a 7-day trial."
           }
           confirmLabel="Approve"
           variant="default"

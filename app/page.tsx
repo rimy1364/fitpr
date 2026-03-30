@@ -89,7 +89,7 @@ export default async function HomePage() {
             </Button>
           </div>
           <p className="text-sm text-gray-500 mt-5">
-            14-day free trial · No credit card required · Cancel any time
+            7-day free trial · No credit card required · Cancel any time
           </p>
         </div>
       </section>
@@ -255,7 +255,7 @@ export default async function HomePage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-white mb-4">Simple, Transparent Pricing</h2>
             <p className="text-gray-400">
-              Choose the plan that fits your business. All plans include a 14-day free trial.
+              Choose the plan that fits your business. All plans include a 7-day free trial.
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6 items-start">

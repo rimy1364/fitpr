@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
       subscriptionStatus: "TRIAL",
       maxTrainers: limits.maxTrainers,
       maxClients: limits.maxClients,
-      trialEndsAt: addDays(new Date(), 14),
+      trialEndsAt: addDays(new Date(), 7),
       createdBy: session.user.id,
     },
   });
