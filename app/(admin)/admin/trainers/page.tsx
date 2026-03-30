@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { Plus, Users } from "lucide-react";
+import { Plus, Users, AlertCircle } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 export const metadata = { title: "Trainers" };
@@ -54,13 +54,33 @@ export default async function TrainersPage() {
             {trainers.length} of {org?.maxTrainers === -1 ? "unlimited" : org?.maxTrainers} trainers
           </p>
         </div>
-        <Button asChild disabled={!canAdd}>
-          <Link href="/admin/trainers/new">
-            <Plus className="mr-2 h-4 w-4" />
+        {canAdd ? (
+          <Button asChild>
+            <Link href="/admin/trainers/new">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Trainer
+            </Link>
+          </Button>
+        ) : (
+          <Button disabled variant="outline" className="gap-2 cursor-not-allowed">
+            <Plus className="h-4 w-4" />
             Add Trainer
-          </Link>
-        </Button>
+          </Button>
+        )}
       </div>
+
+      {!canAdd && (
+        <div className="flex items-start gap-3 rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-950 dark:border-amber-700 p-4">
+          <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium text-amber-800 dark:text-amber-300">Trainer limit reached</p>
+            <p className="text-sm text-amber-700 dark:text-amber-400 mt-0.5">
+              Your <strong>{org?.maxTrainers}</strong>-trainer limit on the current plan has been reached.
+              To add more trainers, please upgrade your plan. Contact your FitPR account manager to upgrade.
+            </p>
+          </div>
+        </div>
+      )}
 
       {trainers.length === 0 ? (
         <Card>
