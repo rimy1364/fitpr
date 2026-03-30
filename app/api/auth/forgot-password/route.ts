@@ -12,10 +12,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: email.toLowerCase() },
-      select: { id: true, name: true, email: true, isActive: true },
-    });
+    let user = null;
+    try {
+      user = await prisma.user.findUnique({
+        where: { email: email.toLowerCase() },
+        select: { id: true, name: true, email: true, isActive: true },
+      });
+    } catch {
+      // DB unavailable — return success silently (no enumeration risk)
+      return NextResponse.json({ success: true });
+    }
 
     // Always return success to prevent email enumeration
     if (!user || !user.isActive) {

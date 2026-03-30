@@ -36,8 +36,9 @@ export function ForgotPasswordForm() {
         body: JSON.stringify({ email: data.email }),
       });
       if (!res.ok) {
-        const json = await res.json();
-        throw new Error(json.error ?? "Something went wrong");
+        let msg = "Something went wrong. Please try again.";
+        try { const j = await res.json(); msg = j.error ?? msg; } catch { /* non-JSON response */ }
+        throw new Error(msg);
       }
       setSubmitted(true);
     } catch (e: unknown) {
