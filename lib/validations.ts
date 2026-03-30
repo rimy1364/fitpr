@@ -52,6 +52,7 @@ export const updateOrgSchema = z.object({
 export const createTrainerSchema = z.object({
   name: z.string().min(2, "Name required"),
   email: z.string().email("Invalid email"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
   phone: z.string().optional(),
   bio: z.string().optional(),
   specializations: z.array(z.string()).default([]),
@@ -63,6 +64,7 @@ export const createTrainerSchema = z.object({
 export const createClientSchema = z.object({
   name: z.string().min(2, "Name required"),
   email: z.string().email("Invalid email"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
   phone: z.string().optional(),
   assignedTrainerId: z.string().optional(),
   goal: z

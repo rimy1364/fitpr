@@ -3,8 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { createTrainerSchema } from "@/lib/validations";
-import { sendInviteEmail } from "@/lib/resend";
-import { addDays } from "date-fns";
+import bcrypt from "bcryptjs";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -35,7 +34,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 });
   }
 
-  const { name, email, phone, bio, specializations, salary } = parsed.data;
+  const { name, email, password, phone, bio, specializations, salary } = parsed.data;
 
   // Check org trainer limit
   const [org, trainerCount] = await Promise.all([
@@ -53,40 +52,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "A user with this email already exists" }, { status: 409 });
   }
 
-  // Create invite
-  const invite = await prisma.orgInvite.create({
-    data: {
-      email,
-      organizationId: orgId,
-      role: "TRAINER",
-      expiresAt: addDays(new Date(), 2),
-    },
-    include: { organization: { select: { name: true } } },
-  });
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Pre-create the user so their profile can be set
   const user = await prisma.user.create({
     data: {
       email,
       name,
       phone,
+      password: hashedPassword,
       role: "TRAINER",
       organizationId: orgId,
-      isActive: false, // activated after invite accepted
+      isActive: true,
     },
   });
 
   await prisma.trainerProfile.create({
     data: { userId: user.id, bio, specializations, salary },
-  });
-
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  await sendInviteEmail({
-    to: email,
-    name,
-    orgName: invite.organization.name,
-    role: "TRAINER",
-    setupUrl: `${appUrl}/setup-account/${invite.token}`,
   });
 
   return NextResponse.json({ data: user }, { status: 201 });

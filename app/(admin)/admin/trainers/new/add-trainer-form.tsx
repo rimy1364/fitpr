@@ -5,35 +5,50 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { createClientSchema } from "@/lib/validations";
+import { createTrainerSchema } from "@/lib/validations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
-type FormData = z.infer<typeof createClientSchema>;
+type FormData = z.infer<typeof createTrainerSchema>;
 
-interface Props {
-  trainers: { id: string; name: string }[];
-}
-
-export function AddClientForm({ trainers }: Props) {
+export function AddTrainerForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [specInput, setSpecInput] = useState("");
+  const [specializations, setSpecializations] = useState<string[]>([]);
   const router = useRouter();
   const { toast } = useToast();
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
-    resolver: zodResolver(createClientSchema),
+    resolver: zodResolver(createTrainerSchema),
+    defaultValues: { specializations: [] },
   });
+
+  const addSpec = () => {
+    const val = specInput.trim();
+    if (val && !specializations.includes(val)) {
+      const updated = [...specializations, val];
+      setSpecializations(updated);
+      setValue("specializations", updated);
+      setSpecInput("");
+    }
+  };
+
+  const removeSpec = (s: string) => {
+    const updated = specializations.filter((x) => x !== s);
+    setSpecializations(updated);
+    setValue("specializations", updated);
+  };
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     try {
-      const res = await fetch("/api/admin/clients", {
+      const res = await fetch("/api/admin/trainers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -43,8 +58,8 @@ export function AddClientForm({ trainers }: Props) {
         toast({ variant: "destructive", title: "Error", description: json.error });
         return;
       }
-      toast({ title: "Client created!", description: `${data.name} can now log in with their email and password.` });
-      router.push("/admin/clients");
+      toast({ title: "Trainer created!", description: `${data.name} can now log in with their email and password.` });
+      router.push("/admin/trainers");
     } catch {
       toast({ variant: "destructive", title: "Error", description: "Something went wrong." });
     } finally {
@@ -58,13 +73,13 @@ export function AddClientForm({ trainers }: Props) {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">Full Name *</Label>
-            <Input id="name" placeholder="Jane Smith" {...register("name")} />
+            <Input id="name" placeholder="John Smith" {...register("name")} />
             {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="email">Email *</Label>
-            <Input id="email" type="email" placeholder="jane@example.com" {...register("email")} />
+            <Input id="email" type="email" placeholder="john@example.com" {...register("email")} />
             {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
           </div>
 
@@ -95,38 +110,49 @@ export function AddClientForm({ trainers }: Props) {
           </div>
 
           <div className="space-y-2">
-            <Label>Assign Trainer</Label>
-            <Select onValueChange={(v) => setValue("assignedTrainerId", v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a trainer" />
-              </SelectTrigger>
-              <SelectContent>
-                {trainers.map((t) => (
-                  <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Label htmlFor="bio">Bio</Label>
+            <Input id="bio" placeholder="Certified personal trainer..." {...register("bio")} />
           </div>
 
           <div className="space-y-2">
-            <Label>Goal</Label>
-            <Select onValueChange={(v) => setValue("goal", v as FormData["goal"])}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a goal" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="WEIGHT_LOSS">Weight Loss</SelectItem>
-                <SelectItem value="MUSCLE_GAIN">Muscle Gain</SelectItem>
-                <SelectItem value="TRANSFORMATION">Transformation</SelectItem>
-                <SelectItem value="FITNESS">General Fitness</SelectItem>
-              </SelectContent>
-            </Select>
+            <Label>Specializations</Label>
+            <div className="flex gap-2">
+              <Input
+                placeholder="e.g. Weight Loss"
+                value={specInput}
+                onChange={(e) => setSpecInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addSpec(); } }}
+              />
+              <Button type="button" variant="outline" onClick={addSpec}>Add</Button>
+            </div>
+            {specializations.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-2">
+                {specializations.map((s) => (
+                  <Badge key={s} variant="secondary" className="gap-1">
+                    {s}
+                    <button type="button" onClick={() => removeSpec(s)}>
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="salary">Monthly Salary (₹)</Label>
+            <Input
+              id="salary"
+              type="number"
+              placeholder="e.g. 25000"
+              {...register("salary", { valueAsNumber: true })}
+            />
           </div>
 
           <div className="flex gap-3 pt-2">
             <Button type="submit" disabled={isLoading} className="flex-1">
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Create Client
+              Create Trainer
             </Button>
             <Button type="button" variant="outline" onClick={() => router.back()}>
               Cancel
