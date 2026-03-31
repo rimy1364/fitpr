@@ -34,14 +34,17 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
   const { assignedTrainerId, status, quarterlyFee } = parsed.data;
 
-  await prisma.clientProfile.update({
-    where: { userId: id },
-    data: {
-      ...(assignedTrainerId !== undefined && { assignedTrainerId }),
-      ...(status !== undefined && { status }),
-      ...(quarterlyFee !== undefined && { quarterlyFee }),
-    },
-  });
+  const updateData: {
+    assignedTrainerId?: string | null;
+    status?: "ACTIVE" | "PAUSED" | "INACTIVE";
+    quarterlyFee?: number | null;
+  } = {};
+
+  if (assignedTrainerId !== undefined) updateData.assignedTrainerId = assignedTrainerId;
+  if (status !== undefined) updateData.status = status;
+  if (quarterlyFee !== undefined) updateData.quarterlyFee = quarterlyFee;
+
+  await prisma.clientProfile.update({ where: { userId: id }, data: updateData });
 
   return NextResponse.json({ success: true });
 }
