@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { formatDate, formatCurrency } from "@/lib/utils";
 import { Mail, Phone, Calendar, Users, IndianRupee } from "lucide-react";
 import Link from "next/link";
+import { TrainerFeeForm } from "./trainer-fee-form";
 
 export const metadata = { title: "Trainer Details" };
 
@@ -50,7 +51,12 @@ export default async function TrainerDetailPage({ params }: Props) {
       <div className="grid gap-4 sm:grid-cols-3">
         {[
           { label: "Assigned Clients", value: clients.length, icon: Users, color: "text-blue-600", bg: "bg-blue-50 dark:bg-blue-950" },
-          { label: "Per Client Fee", value: trainer.trainerProfile?.perClientFee ? formatCurrency(trainer.trainerProfile.perClientFee) : "Not set", icon: IndianRupee, color: "text-purple-600", bg: "bg-purple-50 dark:bg-purple-950" },
+          { label: "Per Client Fee", value: (
+            <div>
+              <span>{trainer.trainerProfile?.perClientFee ? formatCurrency(trainer.trainerProfile.perClientFee) : "Not set"}</span>
+              <TrainerFeeForm trainerId={trainer.id} currentFee={trainer.trainerProfile?.perClientFee ?? null} />
+            </div>
+          ), icon: IndianRupee, color: "text-purple-600", bg: "bg-purple-50 dark:bg-purple-950" },
           { label: "Monthly Salary", value: calculatedSalary != null ? formatCurrency(calculatedSalary) : "—", icon: IndianRupee, color: "text-emerald-600", bg: "bg-emerald-50 dark:bg-emerald-950" },
         ].map((s) => (
           <Card key={s.label}>

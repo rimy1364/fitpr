@@ -93,12 +93,16 @@ export const authOptions: NextAuthOptions = {
       : []),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
         token.organizationId = user.organizationId;
         token.avatar = user.avatar;
+      }
+      // Called when useSession().update({ avatar }) is invoked client-side
+      if (trigger === "update" && session?.avatar) {
+        token.avatar = session.avatar;
       }
       return token;
     },

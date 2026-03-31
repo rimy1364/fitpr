@@ -8,6 +8,7 @@ import {
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { NotificationBell } from "@/components/shared/NotificationBell";
+import { ProfileDialog } from "@/components/shared/ProfileDialog";
 import { getInitials } from "@/lib/utils";
 import { LogOut, User } from "lucide-react";
 import { SessionUser } from "@/types";
@@ -39,10 +40,14 @@ export function TopNav({ user, notificationsPath }: Props) {
               <p className="text-xs text-muted-foreground truncate">{user.email}</p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              Profile
-            </DropdownMenuItem>
+            <ProfileDialog
+              trigger={
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  <User className="mr-2 h-4 w-4" />
+                  Edit Profile Picture
+                </DropdownMenuItem>
+              }
+            />
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="text-destructive focus:text-destructive"
