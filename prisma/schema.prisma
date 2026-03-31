@@ -301,6 +301,7 @@ model ClientPayment {
   amount                Int           // INR
   currency              String        @default("inr")
   status                PaymentStatus @default(PENDING)
+  planName              String?
   billingPeriod         String?       // e.g. "2025-Q1"
   dueDate               DateTime?
   paidAt                DateTime?
