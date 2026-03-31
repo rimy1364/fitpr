@@ -6,6 +6,7 @@ import { formatDate } from "@/lib/utils";
 import { Building2, Mail, Phone, MapPin, Calendar, Shield } from "lucide-react";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { Badge } from "@/components/ui/badge";
+import { BankDetailsForm } from "./bank-details-form";
 
 export const metadata = { title: "Settings — Admin" };
 
@@ -26,6 +27,11 @@ export default async function AdminSettingsPage() {
       subscriptionStatus: true,
       trialEndsAt: true,
       createdAt: true,
+      bankName: true,
+      bankAccountName: true,
+      bankAccountNumber: true,
+      bankIfscCode: true,
+      bankUpiId: true,
     },
   });
 
@@ -35,7 +41,7 @@ export default async function AdminSettingsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Settings</h1>
-        <p className="text-muted-foreground">Your organisation details and account information.</p>
+        <p className="text-muted-foreground">Your organisation details and payment configuration.</p>
       </div>
 
       <Card>
@@ -56,7 +62,6 @@ export default async function AdminSettingsPage() {
               <p className="font-medium font-mono text-sm">/{org.slug}</p>
             </div>
           </div>
-
           <div className="grid sm:grid-cols-2 gap-4">
             {org.email && (
               <div className="flex items-start gap-2">
@@ -77,7 +82,6 @@ export default async function AdminSettingsPage() {
               </div>
             )}
           </div>
-
           {org.address && (
             <div className="flex items-start gap-2">
               <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
@@ -87,7 +91,6 @@ export default async function AdminSettingsPage() {
               </div>
             </div>
           )}
-
           <div className="flex items-start gap-2">
             <Calendar className="h-4 w-4 text-muted-foreground mt-0.5" />
             <div>
@@ -129,9 +132,14 @@ export default async function AdminSettingsPage() {
         </CardContent>
       </Card>
 
-      <p className="text-xs text-muted-foreground">
-        To update your organisation details or subscription, contact your FitPR account manager.
-      </p>
+      {/* Bank Details — editable */}
+      <BankDetailsForm
+        bankName={org.bankName}
+        bankAccountName={org.bankAccountName}
+        bankAccountNumber={org.bankAccountNumber}
+        bankIfscCode={org.bankIfscCode}
+        bankUpiId={org.bankUpiId}
+      />
     </div>
   );
 }

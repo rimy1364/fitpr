@@ -108,6 +108,12 @@ model Organization {
   subscriptionPlan     PlatformPlanName   @default(STARTER)
   maxTrainers          Int                @default(3)
   maxClients           Int                @default(30)
+  // Bank details for client payments
+  bankName             String?
+  bankAccountName      String?
+  bankAccountNumber    String?
+  bankIfscCode         String?
+  bankUpiId            String?
   createdAt            DateTime           @default(now())
   createdBy            String?
 
