@@ -95,6 +95,18 @@ export function AddClientForm({ trainers }: Props) {
           </div>
 
           <div className="space-y-2">
+            <Label htmlFor="quarterlyFee">Quarterly Fee (₹)</Label>
+            <Input
+              id="quarterlyFee"
+              type="number"
+              placeholder="e.g. 15000"
+              {...register("quarterlyFee", { valueAsNumber: true })}
+            />
+            {errors.quarterlyFee && <p className="text-sm text-destructive">{errors.quarterlyFee.message}</p>}
+            <p className="text-xs text-muted-foreground">Amount charged to this client every quarter</p>
+          </div>
+
+          <div className="space-y-2">
             <Label>Assign Trainer</Label>
             <Select onValueChange={(v) => setValue("assignedTrainerId", v)}>
               <SelectTrigger>

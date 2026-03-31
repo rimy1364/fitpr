@@ -151,6 +151,7 @@ model User {
   // Videos as trainer reviewer
   trainerVideos      FormVideo[] @relation("TrainerVideos")
 
+  clientPayments     ClientPayment[] @relation("ClientPayments")
   sentMessages       Message[]      @relation("SentMessages")
   receivedMessages   Message[]      @relation("ReceivedMessages")
   notifications      Notification[]
@@ -184,6 +185,7 @@ model ClientProfile {
   height            Float?
   startDate         DateTime?
   status            ClientStatus @default(ACTIVE)
+  quarterlyFee      Int?         // fee charged to client per quarter (INR)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -296,12 +298,16 @@ model ClientPayment {
   clientId              String
   organizationId        String
   stripePaymentIntentId String?       @unique
-  amount                Int           // in cents
+  amount                Int           // INR
   currency              String        @default("inr")
   status                PaymentStatus @default(PENDING)
-  planName              String?
+  billingPeriod         String?       // e.g. "2025-Q1"
+  dueDate               DateTime?
+  paidAt                DateTime?
+  notes                 String?
   createdAt             DateTime      @default(now())
 
+  client       User         @relation("ClientPayments", fields: [clientId], references: [id])
   organization Organization @relation(fields: [organizationId], references: [id])
 
   @@map("client_payments")

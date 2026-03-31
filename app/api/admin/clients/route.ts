@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 });
   }
 
-  const { name, email, password, phone, assignedTrainerId, goal } = parsed.data;
+  const { name, email, password, phone, assignedTrainerId, goal, quarterlyFee } = parsed.data;
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
@@ -66,6 +66,7 @@ export async function POST(req: NextRequest) {
       userId: user.id,
       assignedTrainerId: assignedTrainerId ?? null,
       goal: goal ?? null,
+      quarterlyFee: quarterlyFee ?? null,
     },
   });
 

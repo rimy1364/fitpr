@@ -70,6 +70,7 @@ export const createClientSchema = z.object({
   goal: z
     .enum(["WEIGHT_LOSS", "MUSCLE_GAIN", "TRANSFORMATION", "FITNESS"])
     .optional(),
+  quarterlyFee: z.number().int().min(0).optional(),
   planId: z.string().optional(),
 });
 
