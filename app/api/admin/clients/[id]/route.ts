@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { ClientStatus } from "@prisma/client";
 import { z } from "zod";
 
 const updateClientSchema = z.object({
   assignedTrainerId: z.string().nullable().optional(),
-  status: z.enum(["ACTIVE", "PAUSED", "INACTIVE"]).optional(),
+  status: z.nativeEnum(ClientStatus).optional(),
   quarterlyFee: z.number().int().min(0).nullable().optional(),
 });
 
@@ -36,7 +37,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
   const updateData: {
     assignedTrainerId?: string | null;
-    status?: "ACTIVE" | "PAUSED" | "INACTIVE";
+    status?: ClientStatus;
     quarterlyFee?: number | null;
   } = {};
 
