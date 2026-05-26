@@ -16,7 +16,13 @@
       "WebFetch(domain:fitpro-saas.vercel.app)",
       "Bash(cat d:/FitPR/app/\\\\\\(superadmin\\\\\\)/superadmin/organizations/[id]/page.tsx)",
       "Bash(cat d:/FitPR/app/api/superadmin/organizations/[id]/route.ts)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(cat d:/FitPR/app/\\\\\\(auth\\\\\\)/login/login-form.tsx)",
+      "Bash(ls d:/FitPR/app/\\\\\\(admin\\\\\\)/admin/)",
+      "Bash(ls d:/FitPR/app/\\\\\\(admin\\\\\\)/)",
+      "Bash(vercel --prod)",
+      "Bash(cat d:/FitPR/app/\\\\\\(auth\\\\\\)/login/page.tsx)",
+      "Bash(ls d:/FitPR/app/\\\\\\(superadmin\\\\\\)/superadmin/)"
     ]
   }
 }

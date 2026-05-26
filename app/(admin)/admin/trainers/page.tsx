@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { Plus, Users, AlertCircle } from "lucide-react";
+import { Plus, Users, AlertCircle, Upload } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 export const metadata = { title: "Trainers" };
@@ -54,19 +54,27 @@ export default async function TrainersPage() {
             {trainers.length} of {org?.maxTrainers === -1 ? "unlimited" : org?.maxTrainers} trainers
           </p>
         </div>
-        {canAdd ? (
-          <Button asChild>
-            <Link href="/admin/trainers/new">
-              <Plus className="mr-2 h-4 w-4" />
-              Add Trainer
+        <div className="flex gap-2">
+          <Button variant="outline" asChild>
+            <Link href="/admin/trainers/bulk">
+              <Upload className="mr-2 h-4 w-4" />
+              Bulk Upload
             </Link>
           </Button>
-        ) : (
-          <Button disabled variant="outline" className="gap-2 cursor-not-allowed">
-            <Plus className="h-4 w-4" />
-            Add Trainer
-          </Button>
-        )}
+          {canAdd ? (
+            <Button asChild>
+              <Link href="/admin/trainers/new">
+                <Plus className="mr-2 h-4 w-4" />
+                Add Trainer
+              </Link>
+            </Button>
+          ) : (
+            <Button disabled variant="outline" className="gap-2 cursor-not-allowed">
+              <Plus className="h-4 w-4" />
+              Add Trainer
+            </Button>
+          )}
+        </div>
       </div>
 
       {!canAdd && (

@@ -26,7 +26,7 @@ interface Props {
 export function ClientDetailActions({ clientId, profile, trainers }: Props) {
   const [open, setOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [trainerId, setTrainerId] = useState(profile?.assignedTrainerId ?? "");
+  const [trainerId, setTrainerId] = useState(profile?.assignedTrainerId ?? "none");
   const [status, setStatus] = useState(profile?.status ?? "ACTIVE");
   const [quarterlyFee, setQuarterlyFee] = useState(String(profile?.quarterlyFee ?? ""));
   const router = useRouter();
@@ -39,7 +39,7 @@ export function ClientDetailActions({ clientId, profile, trainers }: Props) {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          assignedTrainerId: trainerId || null,
+          assignedTrainerId: trainerId === "none" ? null : trainerId,
           status,
           quarterlyFee: quarterlyFee ? parseInt(quarterlyFee) : null,
         }),
@@ -79,7 +79,7 @@ export function ClientDetailActions({ clientId, profile, trainers }: Props) {
                 <SelectValue placeholder="Unassigned" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Unassigned</SelectItem>
+                <SelectItem value="none">Unassigned</SelectItem>
                 {trainers.map((t) => (
                   <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
                 ))}

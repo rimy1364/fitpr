@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import Link from "next/link";
-import { Plus, ExternalLink } from "lucide-react";
+import { Plus, ExternalLink, Upload } from "lucide-react";
 import { formatDate, formatGoal } from "@/lib/utils";
 
 export const metadata = { title: "Clients" };
@@ -43,12 +43,20 @@ export default async function ClientsPage() {
           <h1 className="text-2xl font-bold">Clients</h1>
           <p className="text-muted-foreground">{clients.length} clients in your organization</p>
         </div>
-        <Button asChild>
-          <Link href="/admin/clients/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Client
-          </Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" asChild>
+            <Link href="/admin/clients/bulk">
+              <Upload className="mr-2 h-4 w-4" />
+              Bulk Upload
+            </Link>
+          </Button>
+          <Button asChild>
+            <Link href="/admin/clients/new">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Client
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <Card>
